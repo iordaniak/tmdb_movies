@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.tmdbmovies.ui.model.MovieModel
+import com.example.tmdbmovies.ui.theme.YellowStar
 
 @Composable
 fun MoviesList(
@@ -101,6 +103,19 @@ fun MovieItem(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            Row{
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = "Star",
+                    tint = YellowStar,
+                )
+                Text(
+                    text = movieModel.rating.toString(),
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(horizontal = 6.dp)
+                )
+            }
         }
         Column(
             modifier = Modifier
