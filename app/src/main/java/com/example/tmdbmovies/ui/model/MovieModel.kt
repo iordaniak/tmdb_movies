@@ -5,5 +5,6 @@ data class MovieModel(
     val title: String,
     val overview: String,
     val rating: Double,
+    val isFavored: Boolean,
     val imageUrl: String
 )
