@@ -1,20 +1,12 @@
 package com.example.tmdbmovies
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import com.example.tmdbmovies.ui.TmdbMoviesApp
-import com.example.tmdbmovies.ui.theme.TmdbMoviesTheme
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            TmdbMoviesTheme {
-                TmdbMoviesApp()
-            }
-        }
+        setContentView(R.layout.activity_main)
     }
 }

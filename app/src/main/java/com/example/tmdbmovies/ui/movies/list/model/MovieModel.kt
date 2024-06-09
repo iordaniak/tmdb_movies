@@ -1,4 +1,4 @@
-package com.example.tmdbmovies.ui.model
+package com.example.tmdbmovies.ui.movies.list.model
 
 data class MovieModel(
     val id: Int,
