@@ -42,9 +42,10 @@ import com.example.tmdbmovies.ui.theme.YellowStar
 @Composable
 fun MoviesList(
     moviesList: List<MovieModel>,
+    modifier: Modifier = Modifier
 ){
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .systemBarsPadding()
     ) {items(

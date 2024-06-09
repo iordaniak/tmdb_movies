@@ -1,10 +1,66 @@
 package com.example.tmdbmovies.ui
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.List
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.tmdbmovies.ui.composable.MoviesList
 import com.example.tmdbmovies.ui.model.MovieModel
+
+@Composable
+fun TmdbMoviesApp(){
+    Scaffold(
+        bottomBar = {
+            BottomAppBar(
+                actions = {
+                    IconButton(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(horizontal = 16.dp)
+                            .weight(1f),
+                        onClick = { /* do something */ }
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Outlined.List,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                    IconButton(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(horizontal = 16.dp)
+                            .weight(1f),
+                        onClick = { /* do something */ }
+                    ) {
+                        Icon(
+                            Icons.Filled.Favorite,
+                            contentDescription = "Localized description",
+                        )
+                    }
+                }
+            )
+        }
+    ) {innerPadding ->
+        MoviesList(
+            moviesList = popularDummyList,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+}
+@Preview
+@Composable
+fun TmdbMoviesAppPreview(){
+    TmdbMoviesApp()
+}
 
 var popularDummyList = listOf(
     MovieModel(
@@ -146,16 +202,4 @@ var favoriteDummyList = listOf(
         "https://www.themoviedb.org/t/p/w94_and_h141_bestv2/1n5VUlCqgmVax1adxGZm8oCFaKc.jpg"
     )
 )
-
-@Composable
-fun TmdbMoviesApp(
-    modifier: Modifier = Modifier
-){
-    MoviesList(moviesList = popularDummyList)
-}
-@Preview
-@Composable
-fun TmdbMoviesAppPreview(){
-    TmdbMoviesApp()
-}
 
