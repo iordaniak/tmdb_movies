@@ -1,4 +1,4 @@
-package com.example.tmdbmovies.ui.movies.list
+package com.example.tmdbmovies.ui.movies.list.mapper
 
 import com.example.tmdbmovies.domain.list.entity.MovieModel
 import com.example.tmdbmovies.ui.movies.list.model.MovieUiModel

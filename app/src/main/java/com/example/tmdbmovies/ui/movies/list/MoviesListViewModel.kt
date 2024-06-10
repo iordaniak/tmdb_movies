@@ -3,15 +3,11 @@ package com.example.tmdbmovies.ui.movies.list
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdbmovies.data.list.model.RemoteMoviesListResponse
 import com.example.tmdbmovies.data.repository.TmdbRepository
 import com.example.tmdbmovies.domain.list.entity.MoviesListResult
-import com.example.tmdbmovies.framework.tmdb.datasource.RetrofitInstance
-import com.example.tmdbmovies.ui.movies.list.model.MovieUiModel
+import com.example.tmdbmovies.ui.movies.list.mapper.MoviesListStateUiMapper
 import com.example.tmdbmovies.ui.movies.list.model.MoviesListUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

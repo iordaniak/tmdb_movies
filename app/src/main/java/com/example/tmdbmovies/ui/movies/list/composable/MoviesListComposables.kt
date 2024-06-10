@@ -43,6 +43,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.tmdbmovies.ui.movies.base.EmptyListMessage
+import com.example.tmdbmovies.ui.movies.base.ErrorMessage
+import com.example.tmdbmovies.ui.movies.base.ProgressCircle
 import com.example.tmdbmovies.ui.movies.list.MoviesListViewModel
 import com.example.tmdbmovies.ui.movies.list.model.MovieUiModel
 import com.example.tmdbmovies.ui.movies.list.model.MoviesListUiState
@@ -98,33 +101,18 @@ fun MoviesListContent(
     modifier: Modifier = Modifier
 ) {
     when (val state = moviesListUiState.value) { is
-    MoviesListUiState.DefaultUiState -> {
-        MoviesList(moviesList = state.moviesList)
-    }
+        MoviesListUiState.DefaultUiState -> {
+            MoviesList(moviesList = state.moviesList, modifier = modifier)
+        }
         MoviesListUiState.EmptyUiState -> {
-
+            EmptyListMessage("No Movies to display")
         }
         MoviesListUiState.ErrorUiState -> {
+            ErrorMessage("Error. Something went wrong :(")
         }
         MoviesListUiState.LoadingUiState -> {
             ProgressCircle()
         }
-    }
-}
-
-@Composable
-fun ProgressCircle() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .fillMaxWidth(0.3f)
-                .aspectRatio(1f)
-                .align(Alignment.CenterHorizontally),
-            color = Color.Black
-        )
     }
 }
 
@@ -234,27 +222,21 @@ fun MovieItem(
     }
 }
 
-/*
 @Preview
 @Composable
 fun MovieItemPreview(){
     MovieItem(movieUiModel =
         MovieUiModel(
             id = 1,
+            language = "EN",
             title = "12 Angry Men",
             overview = "The defense and the prosecution have rested and the jury is filing into the jury room to decide if a young Spanish-American is guilty or innocent of murdering his father. What begins as an open and shut case soon becomes a mini-drama of each of the jurors' prejudices and preconceptions about the trial, the accused, and each other.",
+            posterPath = "https://www.themoviedb.org/t/p/w94_and_h141_bestv2/ppd84D2i9W8jXmsyInGyihiSyqz.jpg",
+            releaseDate = "SSS",
             voteAverage = 7.62,
-            isFavorite = false,
-            imageUrl = "https://www.themoviedb.org/t/p/w94_and_h141_bestv2/ppd84D2i9W8jXmsyInGyihiSyqz.jpg"
+            voteCount = 60,
+            isFavorite = false
         )
     )
 }
-@Preview
-@Composable
-fun MoviesListPreview(){
-    MoviesList(
-        moviesList = popularDummyList
-    )
-}
-*/
 
