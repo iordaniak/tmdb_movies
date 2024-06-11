@@ -3,7 +3,6 @@ package com.example.tmdbmovies.ui.movies.list.composable
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
@@ -33,6 +31,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +55,9 @@ fun MoviesListScreen(
     viewModel: MoviesListViewModel
 ){
     val uiState = viewModel.moviesListStateUi
+
+    var showPopup by rememberSaveable { mutableStateOf(false) }
+    var selectedMovie by remember { mutableStateOf(MovieUiModel(id=1,isFavorite=false,language="",overview = "",posterPath = "",releaseDate = "",title = "",voteCount = 0,voteAverage =0.0)) }
 
     Scaffold(
         bottomBar = {
@@ -88,21 +90,33 @@ fun MoviesListScreen(
                 }
             )
         }
-    ) {innerPadding ->
+    ) { innerPadding ->
         MoviesListContent(
             moviesListUiState = uiState,
+            onItemClick = {
+                uiState.value
+                selectedMovie = it
+                showPopup = true },
             modifier = Modifier.padding(innerPadding)
+        )
+    }
+
+    if(showPopup){
+        PopupScreen(
+            onClickOutside = {showPopup = false},
+            content = { PopupMovieDetails(selectedMovie) }
         )
     }
 }
 @Composable
 fun MoviesListContent(
     moviesListUiState: State<MoviesListUiState>,
+    onItemClick: (MovieUiModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (val state = moviesListUiState.value) { is
         MoviesListUiState.DefaultUiState -> {
-            MoviesList(moviesList = state.moviesList, modifier = modifier)
+            MoviesList(moviesList = state.moviesList, onItemClick = { movie -> onItemClick(movie) }, modifier = modifier)
         }
         MoviesListUiState.EmptyUiState -> {
             EmptyListMessage("No Movies to display")
@@ -119,6 +133,7 @@ fun MoviesListContent(
 @Composable
 fun MoviesList(
     moviesList: List<MovieUiModel>,
+    onItemClick: (MovieUiModel) -> Unit,
     modifier: Modifier = Modifier
 ){
     LazyColumn(
@@ -131,6 +146,7 @@ fun MoviesList(
         ) { movie ->
             MovieItem(
                 movieUiModel = movie,
+                onClick = { onItemClick(movie) },
             )
         }
     }
@@ -139,6 +155,7 @@ fun MoviesList(
 @Composable
 fun MovieItem(
     movieUiModel: MovieUiModel,
+    onClick: () -> Unit,
 ){
     var checked:Boolean by remember { mutableStateOf(movieUiModel.isFavorite) }
 
@@ -148,7 +165,7 @@ fun MovieItem(
             .padding(horizontal = 10.dp, vertical = 5.dp)
             .clip(shape = RoundedCornerShape(8.dp))
             .background(Color.White)
-            .clickable(onClick = {})
+            .clickable(onClick = onClick)
     ) {
         AsyncImage(
             model = movieUiModel.posterPath,
@@ -225,8 +242,8 @@ fun MovieItem(
 @Preview
 @Composable
 fun MovieItemPreview(){
-    MovieItem(movieUiModel =
-        MovieUiModel(
+    MovieItem(
+        movieUiModel = MovieUiModel(
             id = 1,
             language = "EN",
             title = "12 Angry Men",
@@ -236,7 +253,8 @@ fun MovieItemPreview(){
             voteAverage = 7.62,
             voteCount = 60,
             isFavorite = false
-        )
+        ),
+        onClick = {}
     )
 }
 

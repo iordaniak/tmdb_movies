@@ -23,6 +23,7 @@ class MoviesListViewModel @Inject constructor(
 
     private val _moviesListStateUi: MutableState<MoviesListUiState> = mutableStateOf(MoviesListUiState.LoadingUiState)
     val moviesListStateUi: State<MoviesListUiState> = _moviesListStateUi
+
     fun initMoviesList() {
         viewModelScope.launch(Dispatchers.IO) {
             _moviesListStateUi.value = MoviesListUiState.LoadingUiState
