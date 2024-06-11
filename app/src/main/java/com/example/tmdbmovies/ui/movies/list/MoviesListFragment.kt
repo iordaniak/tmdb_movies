@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.tmdbmovies.R
@@ -33,6 +34,13 @@ class MoviesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         viewModel.initMoviesList()
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.selectedMovieId.observe(viewLifecycleOwner) {movieId ->
+            navigateToMovieDetailsFragment(movieId)
+        }
     }
 
     private fun setUpViews() {
@@ -46,9 +54,11 @@ class MoviesListFragment : Fragment() {
         }
     }
 
-    private fun navigateToListFragment() {
-        findNavController().navigate(R.id.action_moviesListFragment_to_movieDetailsFragment)
+    private fun navigateToMovieDetailsFragment(movieId: Int) {
+        val bundle = bundleOf("movieId" to movieId)
+        findNavController().navigate(R.id.action_moviesListFragment_to_movieDetailsFragment, bundle)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -63,7 +63,10 @@ fun PopupScreen(
 }
 
 @Composable
-fun PopupMovieDetails(movie: MovieUiModel){
+fun PopupMovieDetails(
+    movie: MovieUiModel,
+    onDetailsClick: () -> Unit
+){
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -110,7 +113,7 @@ fun PopupMovieDetails(movie: MovieUiModel){
 
             Button(
                 modifier = Modifier.padding(vertical = 10.dp),
-                onClick = { /*TODO*/ }
+                onClick = {onDetailsClick()}
             ) {
                 Text(text = "Details")
             }
@@ -132,6 +135,7 @@ fun PopupMovieDetailsPreview(){
             voteAverage = 7.62,
             voteCount = 60,
             isFavorite = false
-        )
+        ),
+        onDetailsClick = {}
     )
 }

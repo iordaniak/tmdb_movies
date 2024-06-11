@@ -104,7 +104,7 @@ fun MoviesListScreen(
     if(showPopup){
         PopupScreen(
             onClickOutside = {showPopup = false},
-            content = { PopupMovieDetails(selectedMovie) }
+            content = { PopupMovieDetails(selectedMovie, onDetailsClick = {viewModel.navigateToDetails(selectedMovie)}) }
         )
     }
 }

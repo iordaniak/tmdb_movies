@@ -4,12 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/moviesListFragment">
-
-    <fragment
-        android:id="@+id/movieDetailsFragment"
-        android:name="com.example.tmdbmovies.ui.movies.details.MovieDetailsFragment"
-        android:label="fragment_movie_details"
-        tools:layout="@layout/fragment_movie_details" />
     <fragment
         android:id="@+id/moviesListFragment"
         android:name="com.example.tmdbmovies.ui.movies.list.MoviesListFragment"
@@ -18,5 +12,11 @@
         <action
             android:id="@+id/action_moviesListFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.example.tmdbmovies.ui.movies.details.MovieDetailsFragment"
+        android:label="fragment_movie_details"
+        tools:layout="@layout/fragment_movie_details" >
     </fragment>
 </navigation>
