@@ -57,7 +57,7 @@ fun MoviesListScreen(
     val uiState = viewModel.moviesListStateUi
 
     var showPopup by rememberSaveable { mutableStateOf(false) }
-    var selectedMovie by remember { mutableStateOf(MovieUiModel(id=1,isFavorite=false,language="",overview = "",posterPath = "",releaseDate = "",title = "",voteCount = 0,voteAverage =0.0)) }
+    var selectedMovie by remember { mutableStateOf(MovieUiModel(id=0,isFavorite=false,language="",overview = "",posterPath = "",releaseDate = "",title = "",voteCount = 0,voteAverage =0.0)) }
 
     Scaffold(
         bottomBar = {
@@ -101,7 +101,7 @@ fun MoviesListScreen(
         )
     }
 
-    if(showPopup){
+    if(showPopup && selectedMovie.id != 0){
         PopupScreen(
             onClickOutside = {showPopup = false},
             content = { PopupMovieDetails(selectedMovie, onDetailsClick = {viewModel.navigateToDetails(selectedMovie)}) }

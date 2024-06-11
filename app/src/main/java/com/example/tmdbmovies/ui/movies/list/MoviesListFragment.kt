@@ -39,7 +39,10 @@ class MoviesListFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.selectedMovieId.observe(viewLifecycleOwner) {movieId ->
-            navigateToMovieDetailsFragment(movieId)
+            if(movieId != 0){
+                navigateToMovieDetailsFragment(movieId)
+                viewModel.doneNavigating()
+            }
         }
     }
 

@@ -3,6 +3,8 @@ package com.example.tmdbmovies.ui.movies.details
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdbmovies.data.repository.TmdbRepository
@@ -26,6 +28,10 @@ class MovieDetailsViewModel @Inject constructor(
         MovieDetailsUiState.LoadingUiState)
     val movieDetailsStateUi: State<MovieDetailsUiState> = _movieDetailsStateUi
 
+    //LiveData for backNavigation
+    private val _navigateBack = MutableLiveData(false)
+    val navigateBack: LiveData<Boolean> = _navigateBack
+
     fun initMovieDetails(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _movieDetailsStateUi.value = MovieDetailsUiState.LoadingUiState
@@ -46,5 +52,13 @@ class MovieDetailsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun navigateBack() {
+        _navigateBack.value = true
+    }
+
+    fun turnOff() {
+        _navigateBack.value = false
     }
 }

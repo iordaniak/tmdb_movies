@@ -28,7 +28,7 @@ class MoviesListViewModel @Inject constructor(
     val moviesListStateUi: State<MoviesListUiState> = _moviesListStateUi
 
     //LiveData for navigation
-    private val _selectedMovieId = MutableLiveData<Int>()
+    private val _selectedMovieId = MutableLiveData(0)
     val selectedMovieId: LiveData<Int> = _selectedMovieId
 
     fun initMoviesList() {
@@ -57,6 +57,10 @@ class MoviesListViewModel @Inject constructor(
 
     fun navigateToDetails(movie: MovieUiModel){
         _selectedMovieId.value = movie.id
+    }
+
+    fun doneNavigating() {
+        _selectedMovieId.value = 0
     }
 }
 

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.tmdbmovies.databinding.FragmentMovieDetailsBinding
 import com.example.tmdbmovies.ui.movies.details.composable.MovieDetailsScreen
 import com.example.tmdbmovies.ui.theme.TmdbMoviesTheme
@@ -32,6 +33,16 @@ class MovieDetailsFragment : Fragment() {
         val receivedMovieId = arguments?.getInt("movieId") ?: 0
         viewModel.initMovieDetails(receivedMovieId)
         setUpViews()
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.navigateBack.observe(viewLifecycleOwner) {navigateBack ->
+            if (navigateBack) {
+                findNavController().navigateUp()
+                viewModel.turnOff()
+            }
+        }
     }
 
     private fun setUpViews() {

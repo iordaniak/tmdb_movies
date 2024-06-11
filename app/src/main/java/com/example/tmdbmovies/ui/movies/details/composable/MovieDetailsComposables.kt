@@ -1,6 +1,7 @@
 package com.example.tmdbmovies.ui.movies.details.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -22,10 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.tmdbmovies.R
 import com.example.tmdbmovies.ui.movies.base.ErrorMessage
 import com.example.tmdbmovies.ui.movies.base.ProgressCircle
 import com.example.tmdbmovies.ui.movies.details.MovieDetailsViewModel
@@ -43,18 +49,20 @@ fun MovieDetailsScreen(
             .fillMaxSize()
             .systemBarsPadding(),
     ) {
-        MovieDetailsContent(uiState)
+        MovieDetailsContent(uiState, onBackClick = {viewModel.navigateBack()})
     }
 }
+
 
 @Composable
 fun MovieDetailsContent(
     movieDetailsUiState: State<MovieDetailsUiState>,
+    onBackClick: () -> Unit
 ) {
     when (val state = movieDetailsUiState.value) { is
 
         MovieDetailsUiState.DefaultUiState -> {
-            MovieDetails(state.movieDetailsItem)
+            MovieDetails(state.movieDetailsItem, onBackClick)
         }
         MovieDetailsUiState.ErrorUiState -> {
             ErrorMessage("Error. Something went wrong :(")
@@ -68,11 +76,17 @@ fun MovieDetailsContent(
 @Composable
 fun MovieDetails(
     movieDetailsUiItem: MovieDetailsUiModel,
+    onBackClick: () -> Unit
+
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        MovieDetailsHeader(
+            headerText = "Details",
+            onBackClick = onBackClick
+        )
         AsyncImage(
             model = movieDetailsUiItem.backdropPath,
             contentDescription = null,
@@ -160,5 +174,40 @@ fun MovieDetails(
                 text = movieDetailsUiItem.voteCount.toString()
             )
         }
+    }
+}
+
+@Composable
+fun MovieDetailsHeader(
+    headerText: String,
+    onBackClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(7f)
+            .padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(
+            onClick = onBackClick
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_back_button),
+                contentDescription = "Close"
+            )
+        }
+        Text(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(horizontal = 16.dp)
+                .weight(1f),
+            text = headerText,
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            lineHeight = 24.sp
+        )
+        Spacer(Modifier.fillMaxWidth(0.1f).aspectRatio(1f))
     }
 }
