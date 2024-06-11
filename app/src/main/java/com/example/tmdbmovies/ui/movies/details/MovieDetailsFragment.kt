@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import com.example.tmdbmovies.databinding.FragmentMovieDetailsBinding
 import com.example.tmdbmovies.ui.movies.details.composable.MovieDetailsScreen
 import com.example.tmdbmovies.ui.theme.TmdbMoviesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
 
     // ViewBinding
@@ -29,15 +31,15 @@ class MovieDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val receivedMovieId = arguments?.getInt("movieId") ?: 0
         viewModel.initMovieDetails(receivedMovieId)
-        setUpViews(receivedMovieId)
+        setUpViews()
     }
 
-    private fun setUpViews(id: Int) {
+    private fun setUpViews() {
         binding.composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 TmdbMoviesTheme {
-                    MovieDetailsScreen(viewModel = viewModel, movieId = id)
+                    MovieDetailsScreen(viewModel = viewModel)
                 }
             }
         }

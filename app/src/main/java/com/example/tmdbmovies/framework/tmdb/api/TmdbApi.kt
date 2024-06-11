@@ -1,8 +1,7 @@
 package com.example.tmdbmovies.framework.tmdb.api
 
-import com.example.tmdbmovies.data.details.RemoteMovieDetailsResponse
+import com.example.tmdbmovies.data.details.model.RemoteMovieDetailsResponse
 import com.example.tmdbmovies.data.list.model.RemoteMoviesListResponse
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -18,5 +17,5 @@ interface TmdbApi {
     suspend fun getMovieDetails(
         @Path("movieId") movieId: Int,
         @Query("api_key") apiKey: String
-    ): Call<RemoteMovieDetailsResponse>
+    ): RemoteMovieDetailsResponse
 }
