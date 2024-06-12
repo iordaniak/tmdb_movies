@@ -35,7 +35,7 @@ class MovieDetailsViewModel @Inject constructor(
     fun initMovieDetails(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _movieDetailsStateUi.value = MovieDetailsUiState.LoadingUiState
-            delay(1500)
+            delay(800)
             fetchMovieDetails(movieId)
         }
     }

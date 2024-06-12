@@ -45,6 +45,7 @@ import coil.compose.AsyncImage
 import com.example.tmdbmovies.ui.movies.base.EmptyListMessage
 import com.example.tmdbmovies.ui.movies.base.ErrorMessage
 import com.example.tmdbmovies.ui.movies.base.ProgressCircle
+import com.example.tmdbmovies.ui.movies.list.FavoritesViewModel
 import com.example.tmdbmovies.ui.movies.list.MoviesListViewModel
 import com.example.tmdbmovies.ui.movies.list.model.MovieUiModel
 import com.example.tmdbmovies.ui.movies.list.model.MoviesListUiState
@@ -52,7 +53,8 @@ import com.example.tmdbmovies.ui.theme.YellowStar
 
 @Composable
 fun MoviesListScreen(
-    viewModel: MoviesListViewModel
+    viewModel: MoviesListViewModel,
+    favoritesViewModel: FavoritesViewModel
 ){
     val uiState = viewModel.moviesListStateUi
 
@@ -97,6 +99,9 @@ fun MoviesListScreen(
                 uiState.value
                 selectedMovie = it
                 showPopup = true },
+            onLikeClick = {
+                favoritesViewModel.getMovieFromComposable(it)
+            },
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -112,11 +117,12 @@ fun MoviesListScreen(
 fun MoviesListContent(
     moviesListUiState: State<MoviesListUiState>,
     onItemClick: (MovieUiModel) -> Unit,
+    onLikeClick: (MovieUiModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (val state = moviesListUiState.value) { is
         MoviesListUiState.DefaultUiState -> {
-            MoviesList(moviesList = state.moviesList, onItemClick = { movie -> onItemClick(movie) }, modifier = modifier)
+            MoviesList(moviesList = state.moviesList, onItemClick = { movie -> onItemClick(movie) }, onLikeClick = { movie -> onLikeClick(movie)},modifier = modifier)
         }
         MoviesListUiState.EmptyUiState -> {
             EmptyListMessage("No Movies to display")
@@ -134,6 +140,7 @@ fun MoviesListContent(
 fun MoviesList(
     moviesList: List<MovieUiModel>,
     onItemClick: (MovieUiModel) -> Unit,
+    onLikeClick: (MovieUiModel) -> Unit,
     modifier: Modifier = Modifier
 ){
     LazyColumn(
@@ -147,6 +154,7 @@ fun MoviesList(
             MovieItem(
                 movieUiModel = movie,
                 onClick = { onItemClick(movie) },
+                onLikeClick = { onLikeClick(movie) }
             )
         }
     }
@@ -156,6 +164,7 @@ fun MoviesList(
 fun MovieItem(
     movieUiModel: MovieUiModel,
     onClick: () -> Unit,
+    onLikeClick: () -> Unit
 ){
     var checked:Boolean by remember { mutableStateOf(movieUiModel.isFavorite) }
 
@@ -222,7 +231,7 @@ fun MovieItem(
                 checked = checked,
                 onCheckedChange = {
                     checked = it
-
+                    onLikeClick()
                 }
             ) {
                 val tint by animateColorAsState(
@@ -254,7 +263,8 @@ fun MovieItemPreview(){
             voteCount = 60,
             isFavorite = false
         ),
-        onClick = {}
+        onClick = {},
+        onLikeClick = {}
     )
 }
 

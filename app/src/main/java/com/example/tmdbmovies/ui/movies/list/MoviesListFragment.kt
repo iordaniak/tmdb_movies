@@ -24,6 +24,7 @@ class MoviesListFragment : Fragment() {
 
     //ViewModel
     private val viewModel: MoviesListViewModel by viewModels()
+    private val favoritesViewModel: FavoritesViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMoviesListBinding.inflate(inflater, container, false)
@@ -44,6 +45,9 @@ class MoviesListFragment : Fragment() {
                 viewModel.doneNavigating()
             }
         }
+        favoritesViewModel.favoriteMovies.observe(viewLifecycleOwner){favorites ->
+            viewModel.giveFavoritesToListViewModel(favorites)
+        }
     }
 
     private fun setUpViews() {
@@ -51,7 +55,7 @@ class MoviesListFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 TmdbMoviesTheme {
-                    MoviesListScreen(viewModel)
+                    MoviesListScreen(viewModel,favoritesViewModel)
                 }
             }
         }

@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class TmdbRepository @Inject constructor(
     private val moviesListMapper: MoviesListMapper,
-    private val movieDetailsMapper: MovieDetailsMapper
+    private val movieDetailsMapper: MovieDetailsMapper,
 ){
     private val api = RetrofitInstance.tmdbApi
 
