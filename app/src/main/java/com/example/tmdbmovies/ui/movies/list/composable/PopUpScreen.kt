@@ -82,7 +82,7 @@ fun PopupMovieDetails(
                 modifier =  Modifier.padding(horizontal = 10.dp)
             ){
                 Text(
-                    text = movie.title,
+                    text = movie.originalTitle,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(text = movie.releaseDate)
@@ -128,7 +128,7 @@ fun PopupMovieDetailsPreview(){
         movie = MovieUiModel(
             id = 1,
             language = "EN",
-            title = "12 Angry Men",
+            originalTitle = "12 Angry Men",
             overview = "The defense and the prosecution have rested and the jury is filing into the jury room to decide if a young Spanish-American is guilty or innocent of murdering his father. What begins as an open and shut case soon becomes a mini-drama of each of the jurors' prejudices and preconceptions about the trial, the accused, and each other.",
             posterPath = "https://www.themoviedb.org/t/p/w94_and_h141_bestv2/ppd84D2i9W8jXmsyInGyihiSyqz.jpg",
             releaseDate = "SSS",

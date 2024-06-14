@@ -16,22 +16,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,84 +40,24 @@ import coil.compose.AsyncImage
 import com.example.tmdbmovies.ui.movies.base.EmptyListMessage
 import com.example.tmdbmovies.ui.movies.base.ErrorMessage
 import com.example.tmdbmovies.ui.movies.base.ProgressCircle
-import com.example.tmdbmovies.ui.movies.list.FavoritesViewModel
-import com.example.tmdbmovies.ui.movies.list.MoviesListViewModel
 import com.example.tmdbmovies.ui.movies.list.model.MovieUiModel
 import com.example.tmdbmovies.ui.movies.list.model.MoviesListUiState
 import com.example.tmdbmovies.ui.theme.YellowStar
 
-@Composable
-fun MoviesListScreen(
-    viewModel: MoviesListViewModel,
-    favoritesViewModel: FavoritesViewModel
-){
-    val uiState = viewModel.moviesListStateUi
 
-    var showPopup by rememberSaveable { mutableStateOf(false) }
-    var selectedMovie by remember { mutableStateOf(MovieUiModel(id=0,isFavorite=false,language="",overview = "",posterPath = "",releaseDate = "",title = "",voteCount = 0,voteAverage =0.0)) }
-
-    Scaffold(
-        bottomBar = {
-            BottomAppBar(
-                actions = {
-                    IconButton(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(horizontal = 16.dp)
-                            .weight(1f),
-                        onClick = { /* do something */ }
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Outlined.List,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                    IconButton(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(horizontal = 16.dp)
-                            .weight(1f),
-                        onClick = { /* do something */ }
-                    ) {
-                        Icon(
-                            Icons.Filled.Favorite,
-                            contentDescription = "Localized description",
-                        )
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
-        MoviesListContent(
-            moviesListUiState = uiState,
-            onItemClick = {
-                uiState.value
-                selectedMovie = it
-                showPopup = true },
-            onLikeClick = {
-                favoritesViewModel.getMovieFromComposable(it)
-            },
-            modifier = Modifier.padding(innerPadding)
-        )
-    }
-
-    if(showPopup && selectedMovie.id != 0){
-        PopupScreen(
-            onClickOutside = {showPopup = false},
-            content = { PopupMovieDetails(selectedMovie, onDetailsClick = {viewModel.navigateToDetails(selectedMovie)}) }
-        )
-    }
-}
 @Composable
 fun MoviesListContent(
     moviesListUiState: State<MoviesListUiState>,
     onItemClick: (MovieUiModel) -> Unit,
     onLikeClick: (MovieUiModel) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     when (val state = moviesListUiState.value) { is
         MoviesListUiState.DefaultUiState -> {
-            MoviesList(moviesList = state.moviesList, onItemClick = { movie -> onItemClick(movie) }, onLikeClick = { movie -> onLikeClick(movie)},modifier = modifier)
+        MoviesList(
+                moviesList = state.moviesList,
+                onItemClick = { movie -> onItemClick(movie) },
+                onLikeClick = { movie -> onLikeClick(movie) }
+            )
         }
         MoviesListUiState.EmptyUiState -> {
             EmptyListMessage("No Movies to display")
@@ -136,15 +71,15 @@ fun MoviesListContent(
     }
 }
 
+
 @Composable
 fun MoviesList(
     moviesList: List<MovieUiModel>,
     onItemClick: (MovieUiModel) -> Unit,
-    onLikeClick: (MovieUiModel) -> Unit,
-    modifier: Modifier = Modifier
+    onLikeClick: (MovieUiModel) -> Unit
 ){
     LazyColumn(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
     ) {items(
@@ -191,7 +126,7 @@ fun MovieItem(
                 .padding(vertical = 8.dp)
         ) {
             Text(
-                text = movieUiModel.title,
+                text = movieUiModel.originalTitle,
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -255,7 +190,7 @@ fun MovieItemPreview(){
         movieUiModel = MovieUiModel(
             id = 1,
             language = "EN",
-            title = "12 Angry Men",
+            originalTitle = "12 Angry Men",
             overview = "The defense and the prosecution have rested and the jury is filing into the jury room to decide if a young Spanish-American is guilty or innocent of murdering his father. What begins as an open and shut case soon becomes a mini-drama of each of the jurors' prejudices and preconceptions about the trial, the accused, and each other.",
             posterPath = "https://www.themoviedb.org/t/p/w94_and_h141_bestv2/ppd84D2i9W8jXmsyInGyihiSyqz.jpg",
             releaseDate = "SSS",

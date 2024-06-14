@@ -14,7 +14,7 @@ data class MovieModel(
     @PrimaryKey
     val id: Int,
     val language: String,
-    val title: String,
+    val originalTitle: String,
     val overview: String,
     val posterPath: String,
     val releaseDate: String,

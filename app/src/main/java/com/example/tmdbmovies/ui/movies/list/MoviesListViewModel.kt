@@ -17,13 +17,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class MoviesListViewModel @Inject constructor(
     private val moviesListStateUiMapper: MoviesListStateUiMapper,
     private val tmdbRepository: TmdbRepository
-): ViewModel() {
+    ): ViewModel() {
 
     // State Ui
     private val _moviesListStateUi: MutableState<MoviesListUiState> = mutableStateOf(MoviesListUiState.LoadingUiState)
@@ -33,14 +34,14 @@ class MoviesListViewModel @Inject constructor(
     private val _selectedMovieId = MutableLiveData(0)
     val selectedMovieId: LiveData<Int> = _selectedMovieId
 
-
-    private var favoriteList: List<MovieModel> = emptyList()
+    //LiveData for favoritesList
+    val favoriteMovies: LiveData<List<MovieModel>> = tmdbRepository.favorites
 
 
     fun initMoviesList() {
         viewModelScope.launch(Dispatchers.IO) {
             _moviesListStateUi.value = MoviesListUiState.LoadingUiState
-            delay(800)
+            delay(1000)
             fetchPopularMovies()
         }
     }
@@ -50,7 +51,8 @@ class MoviesListViewModel @Inject constructor(
             when(val moviesListResult = tmdbRepository.getPopularMovies(1)){
                 is MoviesListResult.SuccessResult -> {
                     val popularMoviesList = moviesListStateUiMapper(moviesList = moviesListResult.moviesList)
-                    val checkedList = checkPopularsForFavorites(popularMoviesList, favoriteList)
+                    val favoriteMoviesList = movieModelListToUiModelList(favoriteMovies.value)
+                    val checkedList = mergePopularAndFavoriteMovies(popularMoviesList,favoriteMoviesList)
                     _moviesListStateUi.value = MoviesListUiState.DefaultUiState(checkedList)
                 }
                 MoviesListResult.EmptyResult -> {
@@ -63,19 +65,52 @@ class MoviesListViewModel @Inject constructor(
         }
     }
 
-    fun giveFavoritesToListViewModel(favorites: List<MovieModel>){
-        favoriteList = favorites
+    // This function checks if any of the popular movies are also marked as favorites.
+    private fun mergePopularAndFavoriteMovies(
+        popularMovies: List<MovieUiModel>,
+        favoriteMovies: List<MovieUiModel>
+    ): List<MovieUiModel> {
+        val favoriteMovieIds = favoriteMovies.map { it.id }.toSet()
+        return popularMovies.map { movie ->
+            if (movie.id in favoriteMovieIds) {
+                movie.copy(isFavorite = true)
+            } else {
+                movie
+            }
+        }
+    }
+    // this function is called when the user clicks a movie's like button and inverts the movie.isFavorite(Boolean) attribute
+    // It then inserts/deletes the movie from the Database but also updates the state
+    fun updateFavorite(movieToUpdate: MovieUiModel) {
+        val currentState = _moviesListStateUi.value
+        if (currentState is MoviesListUiState.DefaultUiState) {
+            val updatedList = currentState.moviesList.map { movie ->
+                if (movie.id == movieToUpdate.id) {
+                    movie.copy(isFavorite = !movieToUpdate.isFavorite)
+                } else {
+                    movie
+                }
+            }
+            _moviesListStateUi.value = MoviesListUiState.DefaultUiState(updatedList)
+        }
+        if(movieToUpdate.isFavorite) deleteMovie(movieToUpdate)
+        else{
+            movieToUpdate.isFavorite=true
+            insertMovie(movieToUpdate)
+        }
     }
 
-
-    private fun checkPopularsForFavorites(popularList: List<MovieUiModel>, favoriteList: List<MovieModel>): List<MovieUiModel>{
-        // Convert favoriteList to a Set for efficient lookups by movie ID from popularList
-        val favoriteListIds = favoriteList.map { it.id }.toSet()
-        // Filter popularList based on movie ID being present in the set from favoriteList
-        return popularList.filter { movie -> favoriteListIds.contains(movie.id) }
+    private fun insertMovie(movie: MovieUiModel) = viewModelScope.launch{
+        tmdbRepository.insert(moviesListStateUiMapper.convertUiToDomain(movie))
+    }
+    private fun deleteMovie(movie: MovieUiModel)= viewModelScope.launch{
+        tmdbRepository.delete(moviesListStateUiMapper.convertUiToDomain(movie))
     }
 
-
+    fun movieModelListToUiModelList(movieList: List<MovieModel>?): List<MovieUiModel> {
+        if (movieList.isNullOrEmpty()) return emptyList()
+        return movieList.map { movie -> moviesListStateUiMapper.convertDomainToUi(movie) }
+    }
 
     fun navigateToDetails(movie: MovieUiModel){
         _selectedMovieId.value = movie.id

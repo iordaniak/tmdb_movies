@@ -71,15 +71,26 @@ dependencies {
     implementation ("androidx.navigation:navigation-dynamic-features-fragment:2.7.7")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
 
+    // Compose Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.compose.material:material:1.6.8")
+
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.46")
+    kapt("com.google.dagger:hilt-android-compiler:2.46")
 
     // RoomDB
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     //ksp("androidx.room:room-compiler:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
+
+    //livedata
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.2")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
+    implementation("androidx.compose.runtime:runtime:1.6.8")
+    implementation("androidx.compose.runtime:runtime-rxjava2:1.6.8")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
