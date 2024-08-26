@@ -5,11 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
@@ -19,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,7 +55,6 @@ fun PopupScreen(
             Box(
                 Modifier
                     .fillMaxWidth(0.9f)
-                    .fillMaxHeight(0.7f)
                     .background(White),
                 contentAlignment = Alignment.Center
             ) {
@@ -68,7 +70,7 @@ fun PopupMovieDetails(
     onDetailsClick: () -> Unit
 ){
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp)
     ){
         Row{
             AsyncImage(
@@ -77,6 +79,7 @@ fun PopupMovieDetails(
                 modifier = Modifier
                     .fillMaxWidth(0.3f)
                     .aspectRatio(2f / 3f)
+                    .clip(shape = RoundedCornerShape(3.dp))
             )
             Column(
                 modifier =  Modifier.padding(horizontal = 10.dp)
@@ -85,7 +88,9 @@ fun PopupMovieDetails(
                     text = movie.originalTitle,
                     style = MaterialTheme.typography.titleMedium
                 )
-                Text(text = movie.releaseDate)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = movie.releaseDate.take(4))
+                Spacer(modifier = Modifier.height(16.dp))
                 Row {
                     Icon(
                         imageVector = Icons.Filled.Star,
@@ -93,7 +98,7 @@ fun PopupMovieDetails(
                         tint = YellowStar,
                     )
                     Text(
-                        text = movie.voteAverage.toString(),
+                        text = movie.voteAverage.toString().take(4),
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .padding(horizontal = 6.dp)
@@ -108,7 +113,7 @@ fun PopupMovieDetails(
             Text(
                 text = movie.overview,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.padding(vertical = 12.dp)
             )
 
             Button(

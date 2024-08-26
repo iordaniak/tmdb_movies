@@ -26,7 +26,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,14 +76,13 @@ fun MovieDetailsContent(
 fun MovieDetails(
     movieDetailsUiItem: MovieDetailsUiModel,
     onBackClick: () -> Unit
-
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MovieDetailsHeader(
-            headerText = "Details",
+            headerText = movieDetailsUiItem.originalTitle,
             onBackClick = onBackClick
         )
         AsyncImage(
@@ -96,12 +94,7 @@ fun MovieDetails(
             contentScale = ContentScale.Crop
         )
 
-        Text(
-            text = movieDetailsUiItem.originalTitle,
-            fontWeight = FontWeight.Bold,
-            fontSize = 28.sp,
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 26.dp)
-        )
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -174,6 +167,23 @@ fun MovieDetails(
                 text = movieDetailsUiItem.voteCount.toString()
             )
         }
+
+        val genres: List<String> = movieDetailsUiItem.genres.map { it.name }
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Genres: ",
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+            for (genre in genres){
+                Text(text = genre)
+                if(genre!= genres[genres.size-1]){
+                    Text(text = ", ")
+
+                }
+            }
+        }
     }
 }
 
@@ -185,13 +195,15 @@ fun MovieDetailsHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(7f)
             .padding(horizontal = 8.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = onBackClick
+            onClick = onBackClick,
+            modifier = Modifier
+                .fillMaxWidth(0.1f)
+                .aspectRatio(1f)
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_back_button),
@@ -201,13 +213,15 @@ fun MovieDetailsHeader(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
-                .padding(horizontal = 16.dp)
+                .padding(vertical = 12.dp, horizontal = 16.dp)
                 .weight(1f),
             text = headerText,
             textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            lineHeight = 24.sp
+            fontSize = 22.sp,
         )
-        Spacer(Modifier.fillMaxWidth(0.1f).aspectRatio(1f))
+        Spacer(
+            Modifier
+                .fillMaxWidth(0.1f)
+                .aspectRatio(1f))
     }
 }

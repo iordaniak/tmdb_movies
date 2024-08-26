@@ -149,7 +149,7 @@ fun MovieItem(
                     tint = YellowStar,
                 )
                 Text(
-                    text = movieUiModel.voteAverage.toString(),
+                    text = movieUiModel.voteAverage.toString().take(4),
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(horizontal = 6.dp)
