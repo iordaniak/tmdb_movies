@@ -1,12 +1,23 @@
 # Tmdb Movies
+A movie discovery app that fetches popular movies from the TMDB API, allowing users to 
+manage their favorite movies and view detailed information when they interact with a specific movie.
 
-A brief description of what your project does and who it's for.
+This project is designed with a focus on clean architecture principles, utilizing the MVVM (Model-View-ViewModel) pattern to ensure a clear separation of concerns and maintainable code structure.
 
-## Features
+## Android Libraries and Frameworks used:
 
-- Fetch Popular Movies
-- Save Favorite Movies
-- Fetch Movie Details
+- [Compose](https://example.com](https://developer.android.com/compose)) declarative UI framework
+- Coroutines and Flow for async operations
+- Retrofit for networking
+- Hilt for dependency injection
+- Coil for image loading
+- RoomDB for local data storage
+- Jetpack
+  - Navigation for navigation between composables
+  - ViewModel that stores, exposes and manages UI state
+  - LiveData
+- Single activity architecture (with Navigation component)
+- MVVM for presentation layer
 
 ## Screenshots
 
