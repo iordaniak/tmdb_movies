@@ -7,17 +7,17 @@ This project is designed with a focus on clean architecture principles, utilizin
 ## Android Libraries and Frameworks used:
 
 - [Compose](https://example.com](https://developer.android.com/compose)) declarative UI framework
-- Coroutines and Flow for async operations
-- Retrofit for networking
-- Hilt for dependency injection
-- Coil for image loading
-- RoomDB for local data storage
-- Jetpack
-  - Navigation for navigation between composables
-  - ViewModel that stores, exposes and manages UI state
-  - LiveData
-- Single activity architecture (with Navigation component)
+- [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) and Flow for async operations
+- [Retrofit](https://square.github.io/retrofit/) for networking
+- [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) for dependency injection
+- [RoomDB](https://developer.android.com/training/data-storage/room) for local data storage
+- [Jetpack](https://developer.android.com/jetpack)
+  - [Navigation](https://developer.android.com/develop/ui/compose/navigation)
+  - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+  - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+- Single activity architecture (with [Navigation](https://developer.android.com/guide/navigation) component)
 - MVVM for presentation layer
+- [Coil](https://github.com/coil-kt/coil) for image loading
 
 ## Screenshots
 
